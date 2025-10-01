@@ -1,20 +1,21 @@
 @import "tailwindcss";
+
 @tailwind utilities;
 
 :root {
-  --background: #18d66d;
-  --foreground: #171717;
+    --background: #18d66d;
+    --foreground: #171717;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    --background: rgba(45, 226, 255, 0.72);
-    --foreground: #ededed;
-  }
+    :root {
+        --background: rgba(45, 226, 255, 0.72);
+        --foreground: #ededed;
+    }
 }
 
 body {
-  /*background: linear-gradient(to right, rgb(23, 213, 209), rgb(253, 223, 70));*/
-  background: white;
-  color: var(--foreground);
+    /*background: linear-gradient(to right, rgb(23, 213, 209), rgb(253, 223, 70));*/
+    background: white;
+    color: var(--foreground);
 }
