@@ -1,7 +1,11 @@
-export default function Home() {
-    return(
-        <div>
+import Hero from "@/components/hero";
 
-        </div>
+export default function Home() {
+    return (
+        <section>
+            <div>
+                <Hero/>
+            </div>
+        </section>
     )
 }
