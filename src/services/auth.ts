@@ -1,4 +1,4 @@
-import api, {ErrorResponse, SuccessResponse, updateCurrentToken} from './api';
+import {api, ErrorResponse, SuccessResponse} from './api';
 import {z} from 'zod';
 
 const UserSchema = z.object({
@@ -26,8 +26,6 @@ export const auth = {
         try {
             const response: SuccessResponse<User> = await api.post('/auth/login', credentials);
 
-            updateCurrentToken(response.data.jwtToken);
-
             return response.data;
         } catch (error) {
             const apiError = error as ErrorResponse;
@@ -41,6 +39,5 @@ export const auth = {
     },
 
     async logout(){
-        updateCurrentToken(null);
     }
 };

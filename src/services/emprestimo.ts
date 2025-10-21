@@ -1,6 +1,8 @@
-import api, {ErrorResponse, SuccessResponse} from './api';
+import {getAuthenticatedApi} from './api';
+import {ErrorResponse, SuccessResponse} from './api';
 import {z} from 'zod';
 import {Temporal} from "@js-temporal/polyfill";
+import PlainDate = Temporal.PlainDate;
 
 const toPlainDate = z.string().transform((str) => Temporal.PlainDate.from(str));
 
@@ -49,19 +51,21 @@ type ResponseDataList = {
 
 export const getUserEmprestimos = async (): Promise<Emprestimo[] | null> => {
     try{
+        const api = await getAuthenticatedApi();
         const response : SuccessResponse<ResponseDataList> = await api.get(`/books/loans/user`);
 
         const validation = await EmprestimosArraySchema.safeParseAsync(response.data.content);
         return validation.data || null;
     } catch (e){
         const apiError = e as ErrorResponse;
-        console.error("Erro ao obter empréstimos do usuário:", apiError.message);
+        console.log("Erro ao obter empréstimos do usuário:", apiError.message);
         return null;
     }
 }
 
 export const getEmprestimoMulta = async (emprestimoId: number): Promise<EmprestimoMulta | null> => {
     try{
+        const api = await getAuthenticatedApi();
         const response : SuccessResponse<EmprestimoMulta> = await api.get(`/books/loans/${emprestimoId}/fine`);
 
         const validation = await EmprestimoMultaSchema.safeParseAsync(response.data);
@@ -70,6 +74,21 @@ export const getEmprestimoMulta = async (emprestimoId: number): Promise<Empresti
     } catch (e) {
         const apiError = e as ErrorResponse;
         console.error("Erro ao obter multa do empréstimo: ", apiError.message)
+        return null;
+    }
+}
+
+export const postEmprestimo = async (emprestimo: {loanId: number, dueDate: PlainDate}) => {
+    try{
+        const api = await getAuthenticatedApi();
+        const response: SuccessResponse<any> = await api.post(`/books/loans`, emprestimo);
+
+        const validation = await EmprestimoSchema.safeParseAsync(response.data.content);
+
+        return validation.data || null;
+    } catch (e) {
+        const apiError = e as ErrorResponse;
+        console.error("Erro ao criar empréstimo!", apiError.message);
         return null;
     }
 }

@@ -14,10 +14,13 @@ export const authOptions: NextAuthOptions = {
                 if (!credentials) {
                     return null;
                 }
-                const user = await auth.login(credentials);
+                const userFromBackend = await auth.login(credentials);
 
-                if (user) {
-                    return user;
+                if (userFromBackend) {
+                    return {
+                        ...userFromBackend,
+                        accessToken: userFromBackend.jwtToken,
+                    };
                 }
 
                 return null;
@@ -36,17 +39,19 @@ export const authOptions: NextAuthOptions = {
                 token.id = Number(user.id);
                 token.email = user.email;
                 token.name = user.name;
+                token.accessToken = user.accessToken;
             }
             return token;
         },
-    async session({ session, token }) {
-      if (session.user && token.id) {
-        session.user.id = token.id as number;
-        session.user.email = token.email;
-        session.user.name = token.name;
-      }
-      return session;
-    },
+        async session({ session, token }) {
+          if (session.user && token.id) {
+            session.user.id = token.id as number;
+            session.user.email = token.email;
+            session.user.name = token.name;
+            session.user.accessToken = token.accessToken;
+          }
+          return session;
+        },
     },
     secret: process.env.AUTH_SECRET,
 }
