@@ -5,7 +5,7 @@ import {Emprestimo, getUserEmprestimos} from "@/services/emprestimo";
 export default async function EmprestimoPage() {
     const session = await checkSession();
 
-    const result = await getUserEmprestimos(session.user.id);
+    const result = await getUserEmprestimos();
     const emprestimos = result ? result : [];
 
     return (

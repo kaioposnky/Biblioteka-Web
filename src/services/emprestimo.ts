@@ -47,9 +47,9 @@ type ResponseDataList = {
 }
 
 
-export const getUserEmprestimos = async (userId: number): Promise<Emprestimo[] | null> => {
+export const getUserEmprestimos = async (): Promise<Emprestimo[] | null> => {
     try{
-        const response : SuccessResponse<ResponseDataList> = await api.get(`/books/loans/user/${userId}`);
+        const response : SuccessResponse<ResponseDataList> = await api.get(`/books/loans/user`);
 
         const validation = await EmprestimosArraySchema.safeParseAsync(response.data.content);
         return validation.data || null;
@@ -69,7 +69,7 @@ export const getEmprestimoMulta = async (emprestimoId: number): Promise<Empresti
         return validation.data || null;
     } catch (e) {
         const apiError = e as ErrorResponse;
-        console.log("Erro ao obter multa do empréstimo: ", apiError.message)
+        console.error("Erro ao obter multa do empréstimo: ", apiError.message)
         return null;
     }
 }

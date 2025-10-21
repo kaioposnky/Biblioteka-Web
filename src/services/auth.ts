@@ -1,10 +1,11 @@
-import api, {ErrorResponse, SuccessResponse} from './api';
+import api, {ErrorResponse, SuccessResponse, updateCurrentToken} from './api';
 import {z} from 'zod';
 
 const UserSchema = z.object({
     id: z.number(),
     name: z.string(),
     email: z.email(),
+    jwtToken: z.string()
 });
 
 const RegisterSchema = z.object({
@@ -23,9 +24,11 @@ export const auth = {
         }
 
         try {
-            const response: SuccessResponse<User> = await api.post('/login', credentials);
-            return response.data;
+            const response: SuccessResponse<User> = await api.post('/auth/login', credentials);
 
+            updateCurrentToken(response.data.jwtToken);
+
+            return response.data;
         } catch (error) {
             const apiError = error as ErrorResponse;
             console.error('Login failed:', apiError.message);
@@ -34,6 +37,10 @@ export const auth = {
     },
 
     async register(data: RegisterFormData): Promise<SuccessResponse<User>> {
-        return api.post('/register', data);
+        return api.post('/auth/register', data);
     },
+
+    async logout(){
+        updateCurrentToken(null);
+    }
 };

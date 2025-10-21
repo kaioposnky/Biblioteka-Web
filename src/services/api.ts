@@ -15,12 +15,30 @@ export interface ErrorResponse {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-const api = axios.create({
+let api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+
+let currentToken: string | null = null
+
+export function updateCurrentToken(newToken: string | null){
+    currentToken = newToken;
+}
+api.interceptors.request.use(
+    (config) => {
+        if (currentToken){
+            config.headers.Authorization = `Bearer ${currentToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+)
 
 api.interceptors.response.use(
     // Se tiver um resposta válida (não deu erro)
