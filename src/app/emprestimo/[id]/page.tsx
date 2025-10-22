@@ -1,11 +1,9 @@
-import {checkSession} from '@/lib/session';
 import {getEmprestimoMulta, EmprestimoMulta} from "@/services/emprestimo";
 import EmprestimoMultaItem from "@/components/emprestimo/emprestimoMulta";
 
 export default async function EmprestimoPage({params}: {
     params: Promise<{ id: string }>
 }) {
-    const session = await checkSession();
     const { id } = await params;
     const numericId = parseInt(id);
     const result : EmprestimoMulta | null = await getEmprestimoMulta(numericId);

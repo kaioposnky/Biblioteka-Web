@@ -1,5 +1,6 @@
 import {signOut, useSession} from "next-auth/react"
 import {useRouter} from "next/navigation"
+import {auth} from "@/services/auth";
 
 export const useAuth = () => {
     const {data: session, status} = useSession();
@@ -10,6 +11,7 @@ export const useAuth = () => {
             redirect: false,
             callbackUrl: '/'
         })
+        await auth.logout();
         router.push('/')
     }
 
