@@ -44,11 +44,11 @@ export const authOptions: NextAuthOptions = {
             return token;
         },
         async session({ session, token }) {
-          if (session.user && token.id) {
+          if (session.user && token.accessToken) {
             session.user.id = token.id as number;
-            session.user.email = token.email;
-            session.user.name = token.name;
-            session.user.accessToken = token.accessToken;
+            session.user.email = token.email as string;
+            session.user.name = token.name as string;
+            session.user.accessToken = token.accessToken as string;
           }
           return session;
         },
