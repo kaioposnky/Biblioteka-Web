@@ -1,32 +1,28 @@
-import {ErrorResponse, SuccessResponse, getAuthenticatedApi} from './api';
-import {z} from 'zod';
-import {Temporal} from "@js-temporal/polyfill";
+"use server"
 
-const toPlainDate = z.string().transform((str) => Temporal.PlainDate.from(str));
+import {ErrorResponse, SuccessResponse, getAuthenticatedApi, api} from './api';
+import {z} from 'zod';
 
 const BookSchema = z.object({
     id: z.number(),
-    bookId: z.number(),
-    bookTitle: z.string(),
+    title: z.string(),
     authorName: z.string(),
+    genreName: z.string(),
+    isAvailable: z.boolean(),
+}).strip();
 
-    loanDate: toPlainDate,
-    dueDate: toPlainDate,
+type Book = z.infer<typeof BookSchema>;
+export default Book
+const BookArraySchema = z.array(BookSchema);
 
-    // Tenta transformar em PlainDate, se não deixa como nulo
-    returnDate: z.string().nullable().transform((str) =>
-        str ? Temporal.PlainDate.from(str) : null
-    ),
-
-    returned: z.boolean(),
-});
-
-export type Book = z.infer<typeof BookSchema>;
+type ResponseDataList = {
+    content: Book[];
+}
 
 export const getBook = async (bookId: number): Promise<Book | null> => {
     try{
         const api = await getAuthenticatedApi();
-        const response: SuccessResponse<Book> = await api.get(`books/${bookId}`);
+        const response: SuccessResponse<Book> = await api.get(`/books/${bookId}`);
 
         const validated = await BookSchema.safeParseAsync(response.data);
 
@@ -34,6 +30,20 @@ export const getBook = async (bookId: number): Promise<Book | null> => {
     } catch (ex){
         const error = ex as ErrorResponse;
         console.log(error);
+        return null;
+    }
+}
+
+export const getAllBooks = async (): Promise<Book[] | null> => {
+    try{
+        const response: SuccessResponse<ResponseDataList> = await api.get("/books");
+
+        const validated = await BookArraySchema.safeParseAsync(response.data.content);
+
+        return validated.data || null;
+    } catch (e){
+        const apiError = e as ErrorResponse;
+        console.log(apiError);
         return null;
     }
 }
