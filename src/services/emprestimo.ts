@@ -1,10 +1,8 @@
+"use server"
+
 import {getAuthenticatedApi} from './api';
 import {ErrorResponse, SuccessResponse} from './api';
 import {z} from 'zod';
-import {Temporal} from "@js-temporal/polyfill";
-import PlainDate = Temporal.PlainDate;
-
-const toPlainDate = z.string().transform((str) => Temporal.PlainDate.from(str));
 
 const EmprestimoSchema = z.object({
     id: z.number(),
@@ -12,13 +10,10 @@ const EmprestimoSchema = z.object({
     bookTitle: z.string(),
     authorName: z.string(),
 
-    loanDate: toPlainDate,
-    dueDate: toPlainDate,
+    loanDate: z.string(),
+    dueDate: z.string(),
 
-    // Tenta transformar em PlainDate, se não deixa como nulo
-    returnDate: z.string().nullable().transform((str) =>
-        str ? Temporal.PlainDate.from(str) : null
-    ),
+    returnDate: z.string().nullable(),
 
     returned: z.boolean(),
 });
@@ -29,12 +24,10 @@ const EmprestimoMultaSchema = z.object({
     bookTitle: z.string(),
     authorName: z.string(),
 
-    loanDate: toPlainDate,
-    dueDate: toPlainDate,
+    loanDate: z.string(),
+    dueDate: z.string(),
 
-    returnDate: z.string().nullable().transform((str) =>
-        str ? Temporal.PlainDate.from(str) : null
-    ),
+    returnDate: z.string().nullable(),
 
     costPerDay: z.number(),
     payed: z.boolean()
@@ -73,22 +66,20 @@ export const getEmprestimoMulta = async (emprestimoId: number): Promise<Empresti
         return validation.data || null;
     } catch (e) {
         const apiError = e as ErrorResponse;
-        console.error("Erro ao obter multa do empréstimo: ", apiError.message)
+        console.log("Erro ao obter multa do empréstimo: ", apiError.message)
         return null;
     }
 }
 
-export const postEmprestimo = async (emprestimo: {loanId: number, dueDate: PlainDate}) => {
+export const postEmprestimo = async (emprestimo: {bookId: number, dueDate: string}) => {
     try{
         const api = await getAuthenticatedApi();
         const response: SuccessResponse<any> = await api.post(`/books/loans`, emprestimo);
 
-        const validation = await EmprestimoSchema.safeParseAsync(response.data.content);
-
+        const validation = await EmprestimoSchema.safeParseAsync(response.data);
         return validation.data || null;
     } catch (e) {
-        const apiError = e as ErrorResponse;
-        console.error("Erro ao criar empréstimo!", apiError.message);
+        console.error("Erro ao criar empréstimo! ", e);
         return null;
     }
 }
