@@ -1,6 +1,7 @@
 import {checkSession} from '@/lib/session';
 import EmprestimoItem from "@/components/emprestimo/emprestimoItem";
 import {Emprestimo, getUserEmprestimos} from "@/services/emprestimo";
+import {Temporal} from "@js-temporal/polyfill";
 
 export default async function EmprestimoPage() {
     const session = await checkSession();
@@ -17,16 +18,21 @@ export default async function EmprestimoPage() {
                     {
                         emprestimos.length > 0 ?
                         emprestimos.map((emprestimo : Emprestimo) => {
-                        return <EmprestimoItem
-                            id={emprestimo.id}
-                            key={emprestimo.id}
-                            bookTitle={emprestimo.bookTitle}
-                            authorName={emprestimo.authorName}
-                            loanDate={emprestimo.loanDate}
-                            dueDate={emprestimo.dueDate}
-                            returnDate={emprestimo.returnDate}
-                            returned={emprestimo.returned}
-                        />}) :
+                            const loanDate = Temporal.PlainDate.from(emprestimo.loanDate);
+                            const dueDate = Temporal.PlainDate.from(emprestimo.dueDate);
+                            const returnDate = emprestimo.returnDate ? Temporal.PlainDate.from(emprestimo.returnDate) : null;
+
+                            return <EmprestimoItem
+                                id={emprestimo.id}
+                                key={emprestimo.id}
+                                bookTitle={emprestimo.bookTitle}
+                                authorName={emprestimo.authorName}
+                                loanDate={loanDate}
+                                dueDate={dueDate}
+                                returnDate={returnDate}
+                                returned={emprestimo.returned}
+                            />
+                        }) :
 
                         <p className={"text-2xl text-red-400"}>Nenhum empréstimo encontrado!</p>
                     }
