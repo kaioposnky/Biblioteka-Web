@@ -17,7 +17,7 @@ export default function Button({
                                    onClick,
                                    className = ""
                                }: ButtonProps) {
-    const baseClasses = "rounded-lg font-medium transition-colors w-full";
+    const baseClasses = "rounded-lg font-medium transition-colors";
 
     const variantClasses = {
         primary: "bg-gray-300 hover:bg-gray-400 text-gray-800",

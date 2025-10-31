@@ -4,11 +4,11 @@ interface TextInputProps extends ComponentPropsWithoutRef<"input"> {
     label: string;
 }
 
-function TextInputBase({label, ...props}: TextInputProps, ref: React.Ref<HTMLInputElement>) {
+function TextInputBase({label, className, ...props}: TextInputProps, ref: React.Ref<HTMLInputElement>) {
     const inputId = props.name || label;
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className={`flex flex-col gap-2 ${className || ''}`}>
             <label htmlFor={inputId} className="text-sm font-medium mt-2">{label}</label>
             <input
                 id={inputId}

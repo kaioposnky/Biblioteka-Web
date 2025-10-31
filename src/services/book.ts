@@ -54,3 +54,19 @@ export const getAllBooks = async (): Promise<Book[] | null> => {
     return null;
   }
 };
+
+export const getSearchBook = async (title: string, isAvailable: boolean) => {
+  try{
+    const response : SuccessResponse<ResponseDataList> = await api.get(`/books/search?title=${title}&isAvailable=${isAvailable}`);
+
+    const validated = await BookArraySchema.safeParseAsync(
+      response.data.content
+    );
+
+    return validated.data || null;
+  } catch(e) {
+    const apiError = e as ErrorResponse;
+    console.log(apiError);
+    return null;
+  }
+}
