@@ -23,11 +23,7 @@ export default function EmprestimoItem({
                                        returned
                                    }: EmprestimoProps) {
 
-    if(returnDate == null){
-        returnDate = Temporal.Now.plainDateISO();
-    }
-
-    const delayDays =  dueDate.until(returnDate).days;
+    const delayDays =  dueDate.until(returnDate ?? Temporal.Now.plainDateISO()).days;
     const realReturnDate = returnDate ? returnDate.toLocaleString() : "NÃO DEVOLVIDO";
 
     return (
