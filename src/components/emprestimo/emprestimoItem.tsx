@@ -53,7 +53,7 @@ export default function EmprestimoItem({
                         <p>Data de empréstimo: {loanDate.toLocaleString()}</p>
                         <p>Data de devolução prevista: {dueDate.toLocaleString()}</p>
                         <p>Data de devolução real: {realReturnDate}</p>
-                        <p>Dias atrasado: {delayDays}</p>
+                        <p>Dias atrasado: {delayDays < 0 ? 0 : delayDays}</p>
 
                         <div className={"flex justify-center mt-1"}>
                             {returned ?
