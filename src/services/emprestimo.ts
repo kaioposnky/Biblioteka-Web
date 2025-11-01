@@ -21,7 +21,6 @@ const EmprestimoSchema = z.object({
 const EmprestimoMultaSchema = z.object({
   loanFineId: z.number(),
   bookLoanId: z.number(),
-  bookId: z.number(),
   bookTitle: z.string(),
   authorName: z.string(),
 
