@@ -9,15 +9,16 @@ import {useRouter} from "next/navigation";
 interface EmprestimoButtonProps {
     bookId: number;
     isAvailable: boolean;
+    dayAmount: number;
 }
 
-export function EmprestimoButton({ bookId, isAvailable }: EmprestimoButtonProps) {
+export function EmprestimoButton({ bookId, isAvailable, dayAmount }: EmprestimoButtonProps) {
     const router = useRouter();
 
     const loanBook = async () => {
         const timezone = Temporal.Now.timeZoneId();
         const now = Temporal.Now.plainDateISO(timezone);
-        const sevenDays = new Temporal.Duration(0, 0, 0, 7);
+        const sevenDays = new Temporal.Duration(0, 0, 0, dayAmount);
         const dueDate = now.add(sevenDays);
         const result = await postEmprestimo({ bookId: bookId, dueDate: dueDate.toString() });
 
@@ -27,7 +28,7 @@ export function EmprestimoButton({ bookId, isAvailable }: EmprestimoButtonProps)
             toast.error("Erro ao pegar livro emprestado!");
         }
 
-        router.push("/biblioteca");
+        router.push("/emprestimo");
     };
 
     return (
@@ -37,7 +38,7 @@ export function EmprestimoButton({ bookId, isAvailable }: EmprestimoButtonProps)
             onClick={loanBook}
             disabled={!isAvailable}
         >
-            Pegar emprestado por 7 dias
+            Pegar emprestado por {dayAmount} dias
         </Button>
     );
 }
