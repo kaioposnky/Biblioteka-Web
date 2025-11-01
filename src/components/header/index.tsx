@@ -33,6 +33,9 @@ export function Header() {
 
                     {isAuthenticated ? (
                         <div className="flex items-center gap-x-4">
+                            <Link href={'/profile'} className={linkStyle}>
+                                Meu Perfil
+                            </Link>
                             <Button
                                 onClick={logout}
                                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"

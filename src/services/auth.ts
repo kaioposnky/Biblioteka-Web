@@ -1,4 +1,4 @@
-import {api, ErrorResponse, SuccessResponse} from './api';
+import {api, ErrorResponse, getAuthenticatedApi, SuccessResponse} from './api';
 import {z} from 'zod';
 
 const UserSchema = z.object({
@@ -14,7 +14,7 @@ const RegisterSchema = z.object({
     password: z.string(),
 });
 
-type User = z.infer<typeof UserSchema>;
+export type User = z.infer<typeof UserSchema>;
 export type RegisterFormData = z.infer<typeof RegisterSchema>;
 
 export const auth = {
@@ -41,3 +41,14 @@ export const auth = {
     async logout(){
     }
 };
+
+export const putUpdateUser = async (name: string, password: string): Promise<void> => {
+      try{
+        const authenticatedApi = await getAuthenticatedApi();
+        await authenticatedApi.put(`/user`, { name: name, password: password });
+
+      } catch (error) {
+        const apiError = error as ErrorResponse;
+        console.error(error);
+      }
+}
