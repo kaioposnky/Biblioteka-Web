@@ -18,8 +18,8 @@ export function EmprestimoButton({ bookId, isAvailable, dayAmount }: EmprestimoB
     const loanBook = async () => {
         const timezone = Temporal.Now.timeZoneId();
         const now = Temporal.Now.plainDateISO(timezone);
-        const sevenDays = new Temporal.Duration(0, 0, 0, dayAmount);
-        const dueDate = now.add(sevenDays);
+        const addDays = new Temporal.Duration(0, 0, 0, dayAmount);
+        const dueDate = now.add(addDays);
         const result = await postEmprestimo({ bookId: bookId, dueDate: dueDate.toString() });
 
         if (result != null) {

@@ -10,7 +10,7 @@ export default function EmprestimoPage({ params }: {
 }) {
     const [numericId, setNumericId] = useState<number>(0);
     const [book,setBook] = useState<Book | null>(null);
-    const [dayAmount, setDayAmount] = useState(0);
+    const [dayAmount, setDayAmount] = useState(3);
 
     useEffect(() => {
         async function getParams() {

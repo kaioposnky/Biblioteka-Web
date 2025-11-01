@@ -1,3 +1,5 @@
+"use server"
+
 import {Temporal} from '@js-temporal/polyfill';
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +15,7 @@ export interface EmprestimoProps {
     key: number;
 }
 
-export default function EmprestimoItem({
+export default async function EmprestimoItem({
                                        id,
                                        bookTitle,
                                        authorName,
@@ -75,6 +77,15 @@ export default function EmprestimoItem({
                         className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
                         href={`/emprestimo/${id}`}>
                         Ver Multa
+                    </Link>
+                </div>
+            }
+            {delayDays < 0 && !returned &&
+                <div className={"flex justify-center"}>
+                    <Link
+                        className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
+                        href={`/emprestimo/${id}/renovate`}>
+                        Renovar Empréstimo
                     </Link>
                 </div>
             }

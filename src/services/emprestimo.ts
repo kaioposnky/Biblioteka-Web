@@ -21,6 +21,7 @@ const EmprestimoSchema = z.object({
 const EmprestimoMultaSchema = z.object({
   loanFineId: z.number(),
   bookLoanId: z.number(),
+  bookId: z.number(),
   bookTitle: z.string(),
   authorName: z.string(),
 
@@ -79,6 +80,27 @@ export const getEmprestimoMulta = async (
   }
 };
 
+export const getEmprestimo = async (
+    emprestimoId: number,
+): Promise<Emprestimo | null> => {
+  try {
+    const api = await getAuthenticatedApi();
+    const response: SuccessResponse<Emprestimo> = await api.get(
+        `/books/loans/${emprestimoId}`,
+    );
+
+    const validation = await EmprestimoSchema.safeParseAsync(
+        response.data,
+    );
+
+    return validation.data || null;
+  } catch (e) {
+    const apiError = e as ErrorResponse;
+    console.log("Erro ao obter empréstimo: ", apiError.message);
+    return null;
+  }
+};
+
 export const postEmprestimo = async (emprestimo: {
   bookId: number;
   dueDate: string;
@@ -101,7 +123,8 @@ export const postEmprestimo = async (emprestimo: {
 export const postRenovateLoan = async (loanId: number, newDueDate: string) => {
   try{
     const api = await getAuthenticatedApi();
-    const response : SuccessResponse<Emprestimo> = await api.post(`/books/loans/${loanId}/renovate`, { newDueDate });
+    const response : SuccessResponse<Emprestimo> = await api.post(
+        `/books/loans/${loanId}/renovate`, newDueDate);
 
     const validated = await EmprestimoSchema.safeParseAsync(response.data);
 
@@ -116,7 +139,7 @@ export const postRenovateLoan = async (loanId: number, newDueDate: string) => {
 export const postBookLoanReservation = async (bookId: number, loanStartDate: string, dueDate: string) => {
   try{
     const api = await getAuthenticatedApi();
-    const response : SuccessResponse<Emprestimo> = await api.post(`/books/loans/${bookId}/renovate`, { loanStartDate, dueDate });
+    const response : SuccessResponse<Emprestimo> = await api.post(`/books/loans/${bookId}/reservate`, { loanStartDate, dueDate });
 
     const validated = await EmprestimoSchema.safeParseAsync(response.data);
 
