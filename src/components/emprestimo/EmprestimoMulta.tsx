@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "@/components/ui/button/button";
 import {postMultaPay} from "@/services/multa";
 import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
 export interface EmprestimoMultaProps {
     id: number;
@@ -39,6 +40,8 @@ export default function EmprestimoMultaItem({
     const delayDays =  dueDatePlain.until(returnDatePlain).days;
     const totalCost = delayDays * costPerDay;
 
+  const navigation = useRouter();
+
     const payFine = () => {
         "use client"
         postMultaPay(id).then(() =>
@@ -46,6 +49,8 @@ export default function EmprestimoMultaItem({
         ).catch((error: any) =>
             toast.error("Ocorreu um erro ao pagar a multa!")
         );
+
+        navigation.replace("/emprestimo")
     }
 
     return (
