@@ -47,15 +47,22 @@ export function BookItem({
             </div>
 
             {/*Carrega o botão de ver multa caso esteja atrasado*/}
-            {isAvailable && canBorrow &&
-                <div className={"flex justify-center"}>
-                    <Link
-                        className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
-                        href={`/emprestimo/create/${id}`}>
-                        Pegar emprestado
-                    </Link>
-                </div>
-            }
+            <div className={"flex justify-center gap-x-3"}>
+              {isAvailable && canBorrow &&
+                      <Link
+                          className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
+                          href={`/emprestimo/create/${id}`}>
+                          Pegar emprestado
+                      </Link>
+              }
+              { canBorrow &&
+                <Link
+                    className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
+                    href={`/emprestimo/reservate/${id}`}>
+                    Reservar emprestimo
+                </Link>
+              }
+            </div>
         </div>
     )
 }

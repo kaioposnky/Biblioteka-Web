@@ -138,15 +138,15 @@ export const postRenovateLoan = async (loanId: number, newDueDate: string) => {
 export const postBookLoanReservation = async (bookId: number, loanStartDate: string, dueDate: string) => {
   try{
     const api = await getAuthenticatedApi();
-    const response : SuccessResponse<Emprestimo> = await api.post(`/books/loans/${bookId}/reservate`, { loanStartDate, dueDate });
+    const response : SuccessResponse<Emprestimo> = await api.post(`/books/${bookId}/loans/reservate`, { loanStartDate, dueDate });
 
-    const validated = await EmprestimoSchema.safeParseAsync(response.data);
+    console.log(response);
 
-    return validated.data || null;
+    return { success: true, message: response.message };
   } catch(e) {
     const apiError = e as ErrorResponse;
     console.log(apiError);
-    return null;
+    return { success: true, message: apiError.message };
   }
 }
 

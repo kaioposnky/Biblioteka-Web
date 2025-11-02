@@ -71,7 +71,7 @@ export default async function EmprestimoItem({
             </div>
 
             {/*Carrega o botão de ver multa caso esteja atrasado*/}
-            {delayDays > 0 &&
+            {!returned && delayDays > 0 &&
                 <div className={"flex justify-center"}>
                     <Link
                         className={"rounded-lg bg-cyan-200 border-black border-2 p-2"}
