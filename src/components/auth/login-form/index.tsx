@@ -17,7 +17,7 @@ const loginSchema = z.object({
 });
 export type LoginFormData = z.infer<typeof loginSchema>;
 
-export default function LoginForm() {
+export default function LoginForm({ onLogin } : { onLogin: () => void }) {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
@@ -33,7 +33,7 @@ export default function LoginForm() {
         setIsLoading(true);
         const result = await signIn(data);
         if (result.success) {
-            router.push('/emprestimo');
+          onLogin();
         }
         setIsLoading(false);
     }
