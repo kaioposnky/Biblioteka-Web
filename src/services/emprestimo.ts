@@ -149,3 +149,39 @@ export const postBookLoanReservation = async (bookId: number, loanStartDate: str
     return null;
   }
 }
+
+export const getLoansForBook = async (bookId: number): Promise<Emprestimo[] | null> => {
+  try {
+    const api = await getAuthenticatedApi();
+    const response: SuccessResponse<ResponseDataList> = await api.get(`/books/${bookId}/loans`);
+
+    const validated = await EmprestimosArraySchema.safeParseAsync(
+      response.data.content,
+    );
+
+    return validated.data || null;
+  } catch (e) {
+    const apiError = e as ErrorResponse;
+    console.log(apiError);
+    return null;
+  }
+}
+
+const LoanUserSchema = z.object({
+  name: z.string(),
+});
+
+export const getUserForLoan = async (loanId: number): Promise<{ name: string } | null> => {
+  try {
+    const api = await getAuthenticatedApi();
+    const response: SuccessResponse<{ name: string }> = await api.get(`/books/loans/${loanId}/user`);
+
+    const validated = await LoanUserSchema.safeParseAsync(response.data);
+
+    return validated.data || null;
+  } catch (e) {
+    const apiError = e as ErrorResponse;
+    console.log(apiError);
+    return null;
+  }
+}

@@ -5,7 +5,7 @@ import {useAuth} from "@/hooks/useAuth";
 import Button from "@/components/ui/button/button";
 
 export function Header() {
-    const {isAuthenticated, logout} = useAuth();
+    const {user, isAuthenticated, logout} = useAuth();
 
     const linkStyle = "text-4xl font-bold hover:text-emerald-500 transition-colors";
 
@@ -30,6 +30,12 @@ export function Header() {
                     <Link href={'/emprestimo'} className={linkStyle}>
                         Empréstimo
                     </Link>
+
+                    {user?.role === "ADMIN" && (
+                      <Link href={"/admin"} className={linkStyle}>
+                        Admin
+                      </Link>
+                    )}
 
                     {isAuthenticated ? (
                         <div className="flex items-center gap-x-4">

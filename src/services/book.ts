@@ -72,3 +72,21 @@ export const getSearchBook = async (title: string, isAvailable: boolean) => {
     return null;
   }
 }
+
+export const postCreateBook = async (title: string, authorName: string, genreName: string) => {
+  try {
+    const response: SuccessResponse<Book> = await api.post("/books", {
+      title,
+      authorName,
+      genreName,
+    });
+
+    const validated = await BookSchema.safeParseAsync(response.data);
+
+    return validated.data || null;
+  } catch (ex) {
+    const error = ex as ErrorResponse;
+    console.log(error);
+    return null;
+  }
+}

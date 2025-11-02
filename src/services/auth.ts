@@ -1,3 +1,4 @@
+import { schema } from '@hookform/resolvers/zod/src/__tests__/__fixtures__/data-v3.js';
 import {api, ErrorResponse, getAuthenticatedApi, SuccessResponse} from './api';
 import {z} from 'zod';
 
@@ -5,7 +6,8 @@ const UserSchema = z.object({
     id: z.number(),
     name: z.string(),
     email: z.email(),
-    jwtToken: z.string()
+    jwtToken: z.string(),
+    role: z.string()
 });
 
 const RegisterSchema = z.object({
