@@ -43,7 +43,7 @@ Siga estas instruções para configurar e executar o projeto em seu ambiente de 
 
     ```
     NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
-    NEXTAUTH_SECRET=6ZI3ZBeJiJrb8Hq+bucX8X9qBqX3VWOHkK/WG4cvoxA=
+    NEXTAUTH_SECRET=
     NEXTAUTH_URL=http://localhost:3000
     ```
 
